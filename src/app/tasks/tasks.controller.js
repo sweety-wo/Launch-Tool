@@ -9,7 +9,7 @@
   function TasksController() {
     var vm = this;
 
-    vm.tasks = {
+    vm.tasksArr = [{
       "taskTitle": "Write a blog post",
       "recommendations": [
         {
@@ -53,8 +53,10 @@
           ]
         }
       ]
-    }
+    }]
 
-
+    vm.fnOpenTask = function(taskObj){
+      console.log('taskObj', taskObj)
+    };
   }
 })();

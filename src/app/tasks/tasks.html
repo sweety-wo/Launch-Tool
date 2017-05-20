@@ -1,1 +1,7 @@
-<div>Hello</div>
+<md-list ng-cloak>
+  <!--{{tasks.tasksArr}}-->
+  <md-list-item ng-repeat="task in tasks.tasksArr" ng-click="task.fnOpenTask(task)">
+    <p> {{ task.taskTitle}} </p>
+    <md-icon class="md-primary"> remove_red_eye </md-icon>
+  </md-list-item>
+</md-list>
