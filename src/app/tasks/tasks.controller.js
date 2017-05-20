@@ -6,7 +6,7 @@
     .controller('TasksController', TasksController);
 
   /** @ngInject */
-  function TasksController() {
+  function TasksController($mdDialog) {
     var vm = this;
 
     vm.tasksArr = [{
@@ -53,10 +53,15 @@
           ]
         }
       ]
-    }]
+    }];
 
     vm.fnOpenTask = function(taskObj){
-      console.log('taskObj', taskObj)
+      $mdDialog.show({
+        templateUrl:'/app/task/task.html',
+        controller:'TaskController',
+        controllerAs:'task',
+        locals:{taskObj:taskObj}
+      })
     };
   }
 })();
