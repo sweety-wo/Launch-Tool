@@ -1,48 +1,119 @@
-<md-dialog style="width: 70%" aria-label="task Modal">
+<md-dialog style="width: 100%" aria-label="task Modal">
   <md-toolbar class="md-toolbar-tools" layout="row" layout-align="space-between center">
     <div></div>
-     <div> {{task.taskObj.taskTitle}} </div>
-      <md-button class="md-primary md-fab" ng-click="task.fnCloseDialog()">
-        <md-icon> clear </md-icon>
-      </md-button>
+    <div> {{task.taskObj.taskTitle}}</div>
+    <md-button class="md-icon-button" aria-label="More" ng-click="tasks.fnCloseDialog()">
+      <md-icon> close</md-icon>
+    </md-button>
   </md-toolbar>
+
+  <md-content layout="row">
+    <md-card md-theme-watch ng-repeat="recommendation in task.taskObj.recommendations">
+      <div layout="row" layout-align="end start">
+        <md-button class="md-icon-button" aria-label="More">
+          <md-icon> close</md-icon>
+        </md-button>
+      </div>
+      <md-card-content style="padding: 8px">
+        <small ng-bind="recommendation.recommendationTitle"></small>
+      </md-card-content>
+    </md-card>
+    <md-card layout="column" layout-align="center center">
+      <md-card-content>
+        <md-icon style="font-size: 40px"> add</md-icon>
+      </md-card-content>
+    </md-card>
+  </md-content>
+
+  <md-divider></md-divider>
 
   <md-content>
     <div layout="column">
+      <div layout="row" layout-align="center center" ng-hide="tasks.isEdit" class="md-padding">
+        <h3>
+          {{task.selectedRecommendation.recommendationTitle}}
+        </h3>
+        <md-button class="md-icon-button" aria-label="Edit" ng-click="tasks.isEdit = !tasks.isEdit">
+          <md-tooltip md-direction="bottom"> Edit</md-tooltip>
+          <md-icon> edit</md-icon>
+        </md-button>
+      </div>
+
+      <div layout="row" layout-align="center center" ng-show="tasks.isEdit">
+        <md-input-container>
+          <label>Recommendation Title</label>
+          <input ng-model="task.selectedRecommendation.recommendationTitle">
+        </md-input-container>
+        <md-button class="md-icon-button" aria-label="Save" ng-click="tasks.isEdit = !tasks.isEdit">
+          <md-tooltip md-direction="bottom">Save</md-tooltip>
+          <md-icon> done</md-icon>
+        </md-button>
+        <md-button class="md-icon-button mini" aria-label="cancel" ng-click="tasks.isEdit = !tasks.isEdit">
+          <md-tooltip md-direction="bottom">Cancel</md-tooltip>
+          <md-icon> close</md-icon>
+        </md-button>
+      </div>
 
       <div layout="row">
-        <md-card md-theme-watch ng-repeat="recommendation in task.taskObj.recommendations">
-        <div layout="row" layout-align="end start">
-          <md-button class="md-icon-button" aria-label="More">
-            <md-icon> close </md-icon>
-          </md-button>
-        </div>
-        <md-card-content>
-          <small>{{recommendation.recommendationTitle}}</small>
-        </md-card-content>
-      </md-card>
+        <md-card md-theme-watch ng-repeat="launchItem in task.selectedRecommendation.launchItems">
+          <div layout="row" layout-align="end start">
+            <md-button class="md-icon-button" aria-label="More">
+              <md-icon> close</md-icon>
+            </md-button>
+          </div>
+          <md-card-title style="padding: 8px" ng-click="task.fnOpenSideNav(launchItem)" class="cursor-pointer">
+            <md-card-title-media ng-if="launchItem.imageURL">
+              <div class="md-media-md card-media">
+                <img ng-src="{{launchItem.imageURL}}">
+              </div>
+            </md-card-title-media>
+          </md-card-title>
+        </md-card>
         <md-card>
-          <md-card-content>
-            <md-icon> add </md-icon>
-          </md-card-content>
+          <md-card-title layout="column" layout-align="center center" style="padding: 8px">
+            <md-icon class="row" style="font-size: 100px"> add</md-icon>
+            <small>Click to Add Or Drag and Drop</small>
+          </md-card-title>
         </md-card>
       </div>
-    <md-divider></md-divider>
-      <div><h3> {{task.selectedRecommendation.recommendationTitle}}
-        <md-icon> edit </md-icon></h3></div>
-
-      <div>
-        <div class="pull-left" ng-repeat="launchItem in task.selectedRecommendation.launchItems">
-          <div ng-if="launchItem.imageURL">
-            <img src="{{launchItem.imageURL}}"/>
-          </div>
-        </div>
-        <div class="pull-left">
-          <div>
-            <md-icon> add </md-icon>
-          </div>
-        </div>
+      <div layout="row" layout-align="center center">
+        <md-button class="md-primary md-raised">Launch</md-button>
       </div>
     </div>
+    <md-sidenav class="md-sidenav-right _md-panel-fullscreen" md-component-id="rightView">
+      <div  layout="row" layout-align=" end center">
+        <md-button class="md-primary md-raised" ng-click="task.fnOpenSideNav()">
+          Back
+        </md-button>
+      </div>
+
+      <div layout="column" layout-align="center center">
+
+        <md-card style="width: 60%">
+          <md-toolbar class="md-hue-1" layout="row" layout-align="center center"><h4>{{task.selectedItem.description}}</h4></md-toolbar>
+          <md-card-content layout="column">
+            <md-input-container >
+              <label>Launch Url</label>
+              <input type="text" ng-model="task.selectedItem.launchURL">
+            </md-input-container>
+
+            <md-input-container >
+              <label>Image Url</label>
+              <input type="text" ng-model="task.selectedItem.imageURL">
+            </md-input-container>
+          </md-card-content>
+
+          <div layout="row" layout-align="end center">
+            <md-button class="md-primary md-raised">
+              Update
+            </md-button>
+            <md-button class="md-warn md-raised" ng-click="task.fnOpenSideNav()">
+              Cancel
+            </md-button>
+          </div>
+        </md-card>
+      </div>
+
+    </md-sidenav>
   </md-content>
 </md-dialog>
